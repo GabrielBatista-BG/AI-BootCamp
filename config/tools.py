@@ -19,13 +19,6 @@ def create_list_of_topics(list_of_topics: list[str]) -> Topics:
     """
     return Topics(topics=list_of_topics)
 
-@tool
-def create_summarization():
-    """
-
-    :return:
-    """
-    pass
 
 
 @tool("busca_por_nome_produto")
@@ -36,7 +29,7 @@ def buscar_por_nome_produto(pergunta: str) -> str:
     """
     retriever = generate_vector_db_to_retrieve_by_product_name(top_k=3)
 
-    docs: List[Document] = retriever.get_relevant_documents(pergunta)
+    docs: List[Document] = retriever.invoke(pergunta)
     if not docs:
         return "Nenhum produto encontrado relacionado a essa consulta."
 
@@ -65,7 +58,7 @@ def buscar_por_marca_produto(pergunta: str) -> str:
     Retorna até 3 resultados formatados (marca + título e texto da review + rating).
     """
     retriever = generate_vector_db_to_retrieve_by_product_brand(top_k=3)
-    docs: List[Document] = retriever.get_relevant_documents(pergunta)
+    docs: List[Document] = retriever.invoke(pergunta)
     if not docs:
         return "Nenhum produto (pela marca) encontrado para essa consulta."
 
@@ -96,7 +89,7 @@ def buscar_por_categoria_lv1(pergunta: str) -> str:
     Retorna até 3 resultados formatados.
     """
     retriever = generate_vector_db_to_retrieve_by_site_category_lv1(top_k=3)
-    docs: List[Document] = retriever.get_relevant_documents(pergunta)
+    docs: List[Document] = retriever.invoke(pergunta)
     if not docs:
         return "Nenhum produto encontrado para essa categoria (nível 1)."
 
@@ -127,7 +120,7 @@ def buscar_por_categoria_lv2(pergunta: str) -> str:
     Retorna até 3 resultados formatados.
     """
     retriever = generate_vector_db_to_retrieve_by_site_category_lv2(top_k=3)
-    docs: List[Document] = retriever.get_relevant_documents(pergunta)
+    docs: List[Document] = retriever.invoke(pergunta)
     if not docs:
         return "Nenhum produto encontrado para essa categoria (nível 2)."
 

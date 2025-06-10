@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from langchain_core.runnables import RunnableSerializable
 from dotenv import load_dotenv
 from models.comentario_input import ComentariosInput
+from langchain_core.messages import HumanMessage
 
 from config.agents import (
     get_agent_sumarizacao,
@@ -190,8 +191,10 @@ async def chat(message: str):
     model = app.consts.model
     agent_chat = get_agent_chat_rag(model)
     config = {"configurable": {"thread_id": "1"}}
-    response = agent_chat.invoke({"input": message},config=config)
-    return {"resposta": response}
+    input_data = {"messages": [HumanMessage(content=message)]}
+    response = agent_chat.invoke(input_data,config=config)
+    final_message_object = response['messages'][-1]
+    return {"resposta": final_message_object.content}
 
 
 
